@@ -37,9 +37,15 @@ The application follows a monorepo structure with clear separation between clien
 - **Middleware**: JSON parsing, URL encoding, request logging
 
 ### Database Schema
-The application uses two main tables:
-- **users**: Basic user management (id, username, password)
+The application uses PostgreSQL with two main tables:
+- **users**: Basic user management (id, username, password)  
 - **contacts**: Contact form submissions (id, firstName, lastName, email, company, serviceInterest, message, createdAt)
+
+### Email System
+- **Nodemailer Integration**: Automatic email forwarding using Nodemailer
+- **Auto-detection**: Automatically detects SMTP settings based on email provider
+- **Reply-to Setup**: Customer emails are set as reply-to for easy responses
+- **Database First**: All messages saved to database before email forwarding
 
 ### UI Design System
 - **Primary Colors**: Black background (#000000), Electric Blue accent (#00BFFF)
@@ -101,7 +107,9 @@ The application uses two main tables:
 ### Key Features
 - Professional business website for AI consulting company
 - Responsive design optimized for all devices
-- Contact form with server-side validation and storage
+- Contact form with PostgreSQL database storage and email forwarding
 - Modern UI with smooth animations and hover effects
 - SEO-optimized with proper meta tags and descriptions
 - Neural network-inspired visual design elements
+- Automatic email notifications for contact form submissions
+- Global market positioning (removed Zimbabwe-specific references)
