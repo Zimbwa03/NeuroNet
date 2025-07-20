@@ -82,7 +82,7 @@ export default function Contact() {
     {
       icon: Mail,
       title: "Email",
-      content: "ngonidzashezimbwa95@gmail.com"
+      content: "ngonidzashezimbwa@gmail.com"
     },
     {
       icon: Clock,
