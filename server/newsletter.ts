@@ -135,7 +135,7 @@ How NeuroNet Can Transform Your Business:
 
 Ready to automate your business? 
 Contact us: +263 78 549 4594
-Email: ngonidzashezimbwa95@gmail.com
+Email: ngonidzashezimbwa@gmail.com
 Website: https://your-repl-url.replit.app/contact
 
 Unsubscribe: https://your-repl-url.replit.app/unsubscribe?email={{email}}
