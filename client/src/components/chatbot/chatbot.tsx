@@ -228,7 +228,7 @@ export default function Chatbot() {
 
     if (input.includes("contact") || input.includes("reach") || input.includes("phone")) {
       return {
-        text: "Ready to connect? Here's how to reach us!\n\nPhone:\n+263 78 549 4594\n+263 78 258 3119\n\nEmail:\nngonidzashezimbwa95@gmail.com\n\nLinkedIn:\nNeuroNet AI Solutions\n\nYou can also fill out our contact form for a detailed response!",
+        text: "Ready to connect? Here's how to reach us!\n\nPhone:\n+263 78 549 4594\n+263 78 258 3119\n\nEmail:\nngonidzashezimbwa@gmail.com\n\nLinkedIn:\nNeuroNet AI Solutions\n\nYou can also fill out our contact form for a detailed response!",
         suggestions: ["Fill contact form", "Call now", "Schedule meeting", "Ask another question"]
       };
     }
