@@ -287,18 +287,19 @@ export default function Contact() {
                 <h3 className="text-2xl font-bold mb-6">Follow Us</h3>
                 <div className="flex space-x-4">
                   {[
-                    { icon: Linkedin, href: "#" },
-                    { icon: Twitter, href: "#" },
-                    { icon: Facebook, href: "#" },
+                    { icon: Linkedin, href: "#", name: "linkedin" },
+                    { icon: Twitter, href: "#", name: "twitter" },
+                    { icon: Facebook, href: "#", name: "facebook" },
                   ].map((social) => {
                     const Icon = social.icon;
                     return (
                       <a
-                        key={social.href}
+                        key={social.name}
                         href={social.href}
-                        className="w-12 h-12 bg-electric-blue rounded-lg flex items-center justify-center hover:bg-blue-400 transition-colors"
+                        className="w-14 h-14 bg-gradient-to-r from-electric-blue to-blue-400 rounded-lg flex items-center justify-center hover:from-blue-400 hover:to-electric-blue transition-all duration-300 transform hover:scale-110 shadow-lg hover:shadow-electric-blue/50"
+                        aria-label={`Follow us on ${social.name}`}
                       >
-                        <Icon className="w-6 h-6 text-black" />
+                        <Icon className="w-7 h-7 text-black font-bold" />
                       </a>
                     );
                   })}
