@@ -177,6 +177,85 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Analytics tracking endpoints
+  app.post("/api/analytics/page-view", async (req, res) => {
+    try {
+      const { page, userAgent, sessionId } = req.body;
+      
+      if (!page) {
+        return res.status(400).json({ 
+          success: false, 
+          message: "Page is required" 
+        });
+      }
+
+      const pageView = await storage.trackPageView({
+        page,
+        userAgent,
+        ipAddress: req.ip,
+        sessionId
+      });
+
+      res.json({ success: true, pageView });
+    } catch (error) {
+      console.error('Page view tracking error:', error);
+      res.status(500).json({ 
+        success: false, 
+        message: "Failed to track page view" 
+      });
+    }
+  });
+
+  app.post("/api/analytics/interaction", async (req, res) => {
+    try {
+      const { type, element, page, data, sessionId } = req.body;
+      
+      if (!type || !page) {
+        return res.status(400).json({ 
+          success: false, 
+          message: "Type and page are required" 
+        });
+      }
+
+      const interaction = await storage.trackUserInteraction({
+        type,
+        element,
+        page,
+        data: data ? JSON.stringify(data) : null,
+        sessionId
+      });
+
+      res.json({ success: true, interaction });
+    } catch (error) {
+      console.error('User interaction tracking error:', error);
+      res.status(500).json({ 
+        success: false, 
+        message: "Failed to track interaction" 
+      });
+    }
+  });
+
+  // Analytics dashboard endpoint
+  app.get("/api/admin/analytics", async (req, res) => {
+    try {
+      const days = parseInt(req.query.days as string) || 30;
+      const dashboard = await storage.getAnalyticsDashboard(days);
+      const recentActivity = await storage.getRecentActivity();
+      
+      res.json({ 
+        success: true, 
+        dashboard,
+        recentActivity
+      });
+    } catch (error) {
+      console.error('Analytics dashboard error:', error);
+      res.status(500).json({ 
+        success: false, 
+        message: "Failed to get analytics data" 
+      });
+    }
+  });
+
   // Chatbot AI query endpoint
   app.post("/api/chatbot", async (req, res) => {
     try {

@@ -10,6 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { useToast } from "@/hooks/use-toast";
+import { useAnalytics } from "@/hooks/use-analytics";
 import { apiRequest } from "@/lib/queryClient";
 import { MapPin, Phone, Mail, Clock, Linkedin, Twitter, Facebook } from "lucide-react";
 
@@ -26,6 +27,7 @@ type ContactFormData = z.infer<typeof contactFormSchema>;
 
 export default function Contact() {
   const { toast } = useToast();
+    const { trackInteraction } = useAnalytics();
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   const form = useForm<ContactFormData>({
@@ -45,6 +47,7 @@ export default function Contact() {
       return await apiRequest("POST", "/api/contact", data);
     },
     onSuccess: () => {
+          trackInteraction('form_submit', 'contact_form', '/contact');
       setIsSubmitted(true);
       form.reset();
       toast({
@@ -110,7 +113,7 @@ export default function Contact() {
             <Card className="bg-black border-electric-blue/30">
               <CardContent className="p-8">
                 <h2 className="text-3xl font-bold mb-6">Send us a message</h2>
-                
+
                 {isSubmitted ? (
                   <div className="text-center py-8">
                     <div className="w-16 h-16 bg-electric-blue rounded-full flex items-center justify-center mx-auto mb-4">
