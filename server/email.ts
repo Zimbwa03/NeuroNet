@@ -98,17 +98,25 @@ export function createEmailService(): EmailService | null {
   
   let host = 'smtp.gmail.com';
   let port = 587;
+  let secure = false;
   
   if (domain.includes('outlook') || domain.includes('hotmail') || domain.includes('live')) {
     host = 'smtp-mail.outlook.com';
+    port = 587;
   } else if (domain.includes('yahoo')) {
     host = 'smtp.mail.yahoo.com';
+    port = 587;
+  } else if (domain.includes('gmail')) {
+    // Try alternative Gmail settings
+    host = 'smtp.gmail.com';
+    port = 465;
+    secure = true;
   }
 
   const config: EmailConfig = {
     host,
     port,
-    secure: false, // Use STARTTLS
+    secure,
     user: email,
     password: process.env.EMAIL_PASSWORD!,
     fromEmail: email,
