@@ -346,42 +346,107 @@ export default function Chatbot() {
     <div className="fixed bottom-4 right-4 z-50 sm:bottom-4 sm:right-4 bottom-2 right-2">
       {/* Chat Button */}
       {!isOpen && (
-        <Button
-          onClick={() => setIsOpen(true)}
-          className="w-16 h-16 rounded-full bg-gradient-to-r from-electric-blue to-blue-400 hover:from-blue-400 hover:to-electric-blue shadow-lg hover:shadow-electric-blue/50 transition-all duration-300 transform hover:scale-110"
-        >
-          <div className="relative">
-            <div className="w-10 h-10 relative">
-              <svg viewBox="0 0 100 100" className="w-full h-full">
-                {/* Background circle for better contrast */}
-                <circle cx="50" cy="50" r="45" fill="rgba(0,0,0,0.3)" stroke="none" />
-                
-                <g fill="none" stroke="currentColor" strokeWidth="4" className="text-black">
-                  {/* Brain outline - simplified and bolder */}
-                  <path d="M25 35 Q20 30 25 25 Q30 20 40 25 Q50 15 65 20 Q75 25 75 35 Q80 40 75 50 Q80 60 75 70 Q70 80 60 80 Q50 85 40 80 Q30 80 25 70 Q20 60 25 50 Q20 40 25 35 Z" strokeWidth="5" />
-                  
-                  {/* Neural network nodes - larger and more visible */}
-                  <circle cx="35" cy="35" r="4" fill="currentColor" strokeWidth="2" />
-                  <circle cx="50" cy="30" r="4" fill="currentColor" strokeWidth="2" />
-                  <circle cx="65" cy="40" r="4" fill="currentColor" strokeWidth="2" />
-                  <circle cx="40" cy="50" r="4" fill="currentColor" strokeWidth="2" />
-                  <circle cx="60" cy="55" r="4" fill="currentColor" strokeWidth="2" />
-                  <circle cx="45" cy="65" r="4" fill="currentColor" strokeWidth="2" />
-                  
-                  {/* Neural connections - thicker lines */}
-                  <line x1="35" y1="35" x2="50" y2="30" strokeWidth="3" />
-                  <line x1="50" y1="30" x2="65" y2="40" strokeWidth="3" />
-                  <line x1="35" y1="35" x2="40" y2="50" strokeWidth="3" />
-                  <line x1="65" y1="40" x2="60" y2="55" strokeWidth="3" />
-                  <line x1="40" y1="50" x2="60" y2="55" strokeWidth="3" />
-                  <line x1="40" y1="50" x2="45" y2="65" strokeWidth="3" />
-                  <line x1="60" y1="55" x2="45" y2="65" strokeWidth="3" />
-                </g>
-              </svg>
-            </div>
-            <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-400 rounded-full animate-pulse border-2 border-white"></div>
+        <div className="relative">
+          {/* Radiating rings animation */}
+          <div className="absolute inset-0 w-16 h-16">
+            <div className="absolute inset-0 w-16 h-16 rounded-full bg-electric-blue/20 animate-ping animation-delay-0"></div>
+            <div className="absolute inset-0 w-16 h-16 rounded-full bg-electric-blue/30 animate-ping animation-delay-300"></div>
+            <div className="absolute inset-0 w-16 h-16 rounded-full bg-electric-blue/40 animate-ping animation-delay-600"></div>
           </div>
-        </Button>
+          
+          {/* Outer glow ring */}
+          <div className="absolute -inset-2 w-20 h-20 rounded-full bg-gradient-to-r from-electric-blue/30 via-purple-500/30 to-pink-500/30 animate-spin-slow blur-sm"></div>
+          
+          {/* Main button */}
+          <Button
+            onClick={() => setIsOpen(true)}
+            className="relative w-16 h-16 rounded-full bg-gradient-to-r from-electric-blue via-purple-500 to-pink-500 hover:from-pink-500 hover:via-purple-500 hover:to-electric-blue shadow-2xl hover:shadow-electric-blue/80 transition-all duration-500 transform hover:scale-125 animate-gradient-x"
+          >
+            <div className="relative">
+              {/* Inner pulsing glow */}
+              <div className="absolute inset-0 w-10 h-10 bg-white/20 rounded-full animate-pulse"></div>
+              
+              <div className="w-10 h-10 relative">
+                <svg viewBox="0 0 100 100" className="w-full h-full animate-float">
+                  {/* Animated background circle */}
+                  <circle cx="50" cy="50" r="45" fill="rgba(255,255,255,0.1)" stroke="none" className="animate-pulse" />
+                  
+                  <g fill="none" stroke="currentColor" strokeWidth="4" className="text-white drop-shadow-lg">
+                    {/* Brain outline with glow effect */}
+                    <path 
+                      d="M25 35 Q20 30 25 25 Q30 20 40 25 Q50 15 65 20 Q75 25 75 35 Q80 40 75 50 Q80 60 75 70 Q70 80 60 80 Q50 85 40 80 Q30 80 25 70 Q20 60 25 50 Q20 40 25 35 Z" 
+                      strokeWidth="5" 
+                      className="animate-pulse filter drop-shadow-sm"
+                      style={{
+                        filter: 'drop-shadow(0 0 4px rgba(0, 255, 255, 0.8))'
+                      }}
+                    />
+                    
+                    {/* Animated neural network nodes */}
+                    <circle cx="35" cy="35" r="4" fill="currentColor" strokeWidth="2" className="animate-pulse animation-delay-100">
+                      <animate attributeName="r" values="3;5;3" dur="2s" repeatCount="indefinite" />
+                    </circle>
+                    <circle cx="50" cy="30" r="4" fill="currentColor" strokeWidth="2" className="animate-pulse animation-delay-200">
+                      <animate attributeName="r" values="3;5;3" dur="2s" repeatCount="indefinite" begin="0.3s" />
+                    </circle>
+                    <circle cx="65" cy="40" r="4" fill="currentColor" strokeWidth="2" className="animate-pulse animation-delay-300">
+                      <animate attributeName="r" values="3;5;3" dur="2s" repeatCount="indefinite" begin="0.6s" />
+                    </circle>
+                    <circle cx="40" cy="50" r="4" fill="currentColor" strokeWidth="2" className="animate-pulse animation-delay-400">
+                      <animate attributeName="r" values="3;5;3" dur="2s" repeatCount="indefinite" begin="0.9s" />
+                    </circle>
+                    <circle cx="60" cy="55" r="4" fill="currentColor" strokeWidth="2" className="animate-pulse animation-delay-500">
+                      <animate attributeName="r" values="3;5;3" dur="2s" repeatCount="indefinite" begin="1.2s" />
+                    </circle>
+                    <circle cx="45" cy="65" r="4" fill="currentColor" strokeWidth="2" className="animate-pulse animation-delay-600">
+                      <animate attributeName="r" values="3;5;3" dur="2s" repeatCount="indefinite" begin="1.5s" />
+                    </circle>
+                    
+                    {/* Animated neural connections with energy flow */}
+                    <line x1="35" y1="35" x2="50" y2="30" strokeWidth="3" className="animate-pulse animation-delay-100">
+                      <animate attributeName="stroke-opacity" values="0.3;1;0.3" dur="1.5s" repeatCount="indefinite" />
+                    </line>
+                    <line x1="50" y1="30" x2="65" y2="40" strokeWidth="3" className="animate-pulse animation-delay-200">
+                      <animate attributeName="stroke-opacity" values="0.3;1;0.3" dur="1.5s" repeatCount="indefinite" begin="0.2s" />
+                    </line>
+                    <line x1="35" y1="35" x2="40" y2="50" strokeWidth="3" className="animate-pulse animation-delay-300">
+                      <animate attributeName="stroke-opacity" values="0.3;1;0.3" dur="1.5s" repeatCount="indefinite" begin="0.4s" />
+                    </line>
+                    <line x1="65" y1="40" x2="60" y2="55" strokeWidth="3" className="animate-pulse animation-delay-400">
+                      <animate attributeName="stroke-opacity" values="0.3;1;0.3" dur="1.5s" repeatCount="indefinite" begin="0.6s" />
+                    </line>
+                    <line x1="40" y1="50" x2="60" y2="55" strokeWidth="3" className="animate-pulse animation-delay-500">
+                      <animate attributeName="stroke-opacity" values="0.3;1;0.3" dur="1.5s" repeatCount="indefinite" begin="0.8s" />
+                    </line>
+                    <line x1="40" y1="50" x2="45" y2="65" strokeWidth="3" className="animate-pulse animation-delay-600">
+                      <animate attributeName="stroke-opacity" values="0.3;1;0.3" dur="1.5s" repeatCount="indefinite" begin="1.0s" />
+                    </line>
+                    <line x1="60" y1="55" x2="45" y2="65" strokeWidth="3" className="animate-pulse animation-delay-700">
+                      <animate attributeName="stroke-opacity" values="0.3;1;0.3" dur="1.5s" repeatCount="indefinite" begin="1.2s" />
+                    </line>
+                  </g>
+                </svg>
+              </div>
+              
+              {/* Enhanced status indicator with multiple rings */}
+              <div className="absolute -top-1 -right-1">
+                <div className="relative w-6 h-6">
+                  <div className="absolute inset-0 w-6 h-6 bg-green-400/30 rounded-full animate-ping"></div>
+                  <div className="absolute inset-1 w-4 h-4 bg-green-400 rounded-full animate-pulse border-2 border-white shadow-lg"></div>
+                  <div className="absolute inset-2 w-2 h-2 bg-white rounded-full animate-pulse"></div>
+                </div>
+              </div>
+              
+              {/* Floating particles */}
+              <div className="absolute inset-0 pointer-events-none">
+                <div className="absolute top-0 left-2 w-1 h-1 bg-electric-blue rounded-full animate-bounce animation-delay-100"></div>
+                <div className="absolute top-2 right-0 w-1 h-1 bg-purple-400 rounded-full animate-bounce animation-delay-300"></div>
+                <div className="absolute bottom-0 left-0 w-1 h-1 bg-pink-400 rounded-full animate-bounce animation-delay-500"></div>
+                <div className="absolute bottom-2 right-2 w-1 h-1 bg-electric-blue rounded-full animate-bounce animation-delay-700"></div>
+              </div>
+            </div>
+          </Button>
+        </div>
       )}
 
       {/* Chat Window */}
