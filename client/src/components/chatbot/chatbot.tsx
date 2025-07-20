@@ -228,7 +228,7 @@ export default function Chatbot() {
 
     if (input.includes("contact") || input.includes("reach") || input.includes("phone")) {
       return {
-        text: "Ready to connect? Here's how to reach us!\n\nPhone: +263 78 549 4594 or +263 78 258 3119\nEmail: ngonidzashezimbwa95@gmail.com\nLinkedIn: NeuroNet AI Solutions\n\nYou can also fill out our contact form for a detailed response!",
+        text: "Ready to connect? Here's how to reach us!\n\nPhone:\n+263 78 549 4594\n+263 78 258 3119\n\nEmail:\nngonidzashezimbwa95@gmail.com\n\nLinkedIn:\nNeuroNet AI Solutions\n\nYou can also fill out our contact form for a detailed response!",
         suggestions: ["Fill contact form", "Call now", "Schedule meeting", "Ask another question"]
       };
     }
@@ -343,7 +343,7 @@ export default function Chatbot() {
   };
 
   return (
-    <div className="fixed bottom-4 right-4 z-50">
+    <div className="fixed bottom-4 right-4 z-50 sm:bottom-4 sm:right-4 bottom-2 right-2">
       {/* Chat Button */}
       {!isOpen && (
         <Button
@@ -386,7 +386,7 @@ export default function Chatbot() {
 
       {/* Chat Window */}
       {isOpen && (
-        <Card className="w-80 h-96 bg-black border-electric-blue/30 shadow-2xl shadow-electric-blue/20">
+        <Card className="w-80 h-96 sm:w-80 max-w-[90vw] bg-black border-electric-blue/30 shadow-2xl shadow-electric-blue/20">
           {/* Header */}
           <div className="flex items-center justify-between p-4 border-b border-electric-blue/30 bg-gradient-to-r from-electric-blue/10 to-blue-600/10">
             <div className="flex items-center space-x-3">
@@ -442,7 +442,7 @@ export default function Chatbot() {
           <CardContent className="h-64 overflow-y-auto p-4 space-y-4 scrollbar-thin scrollbar-thumb-electric-blue/50">
             {messages.map((message) => (
               <div key={message.id} className={`flex ${message.isBot ? "justify-start" : "justify-end"}`}>
-                <div className={`max-w-[75%] ${message.isBot ? "order-2" : "order-1"}`}>
+                <div className={`max-w-[85%] sm:max-w-[75%] ${message.isBot ? "order-2" : "order-1"}`}>
                   <div className={`p-3 rounded-lg ${
                     message.isBot 
                       ? "bg-neutral-800 text-white" 
@@ -454,7 +454,7 @@ export default function Chatbot() {
                         <span>AI-Powered Response</span>
                       </div>
                     )}
-                    <p className="text-sm whitespace-pre-line break-words leading-relaxed">{message.text}</p>
+                    <p className="text-sm whitespace-pre-line break-words leading-relaxed overflow-wrap-anywhere word-break-break-word">{message.text}</p>
                   </div>
                   
                   {/* Suggestions */}
@@ -464,7 +464,7 @@ export default function Chatbot() {
                         <Badge
                           key={index}
                           variant="outline"
-                          className="cursor-pointer text-xs border-electric-blue/50 text-electric-blue hover:bg-electric-blue hover:text-black transition-colors"
+                          className="cursor-pointer text-xs border-electric-blue/50 text-electric-blue hover:bg-electric-blue hover:text-black transition-colors break-words max-w-full"
                           onClick={() => handleSuggestionClick(suggestion)}
                         >
                           {suggestion}
@@ -569,12 +569,12 @@ export default function Chatbot() {
                 onChange={(e) => setInputValue(e.target.value)}
                 onKeyPress={handleKeyPress}
                 placeholder="Ask me anything about AI..."
-                className="flex-1 px-3 py-2 bg-neutral-800 border border-electric-blue/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-electric-blue text-sm"
+                className="flex-1 px-3 py-2 bg-neutral-800 border border-electric-blue/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-electric-blue text-sm min-w-0"
               />
               <Button
                 onClick={handleSendMessage}
                 disabled={!inputValue.trim()}
-                className="bg-electric-blue hover:bg-blue-400 text-black p-2 disabled:opacity-50"
+                className="bg-electric-blue hover:bg-blue-400 text-black p-2 disabled:opacity-50 flex-shrink-0"
               >
                 <Send className="w-4 h-4" />
               </Button>

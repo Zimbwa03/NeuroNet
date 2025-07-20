@@ -74,7 +74,7 @@ export default function Contact() {
     {
       icon: Phone,
       title: "Phone",
-      content: "+263 78 549 4594 / +263 78 258 3119"
+      content: ["+263 78 549 4594", "+263 78 258 3119"]
     },
     {
       icon: Mail,
@@ -105,7 +105,7 @@ export default function Contact() {
       {/* Contact Form and Info */}
       <section className="py-20 bg-neutral-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-16">
+          <div className="grid lg:grid-cols-2 gap-8 lg:gap-16">
             {/* Contact Form */}
             <Card className="bg-black border-electric-blue/30">
               <CardContent className="p-8">
@@ -264,18 +264,26 @@ export default function Contact() {
             {/* Contact Information */}
             <div className="space-y-8">
               <div>
-                <h2 className="text-3xl font-bold mb-6">Contact Information</h2>
-                <div className="space-y-6">
+                <h2 className="text-2xl sm:text-3xl font-bold mb-6">Contact Information</h2>
+                <div className="space-y-4 sm:space-y-6">
                   {contactInfo.map((info) => {
                     const Icon = info.icon;
                     return (
                       <div key={info.title} className="flex items-start">
-                        <div className="w-12 h-12 bg-electric-blue rounded-lg flex items-center justify-center mr-4">
+                        <div className="w-12 h-12 bg-electric-blue rounded-lg flex items-center justify-center mr-4 flex-shrink-0">
                           <Icon className="w-6 h-6 text-black" />
                         </div>
-                        <div>
+                        <div className="min-w-0 flex-1">
                           <h4 className="font-semibold mb-1">{info.title}</h4>
-                          <p className="text-gray-400">{info.content}</p>
+                          {Array.isArray(info.content) ? (
+                            <div className="space-y-1">
+                              {info.content.map((item, index) => (
+                                <p key={index} className="text-gray-400 break-words text-sm sm:text-base">{item}</p>
+                              ))}
+                            </div>
+                          ) : (
+                            <p className="text-gray-400 break-words text-sm sm:text-base">{info.content}</p>
+                          )}
                         </div>
                       </div>
                     );
@@ -284,8 +292,8 @@ export default function Contact() {
               </div>
 
               <div>
-                <h3 className="text-2xl font-bold mb-6">Follow Us</h3>
-                <div className="flex space-x-4">
+                <h3 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">Follow Us</h3>
+                <div className="flex flex-wrap gap-3 sm:gap-4">
                   {[
                     { icon: Linkedin, href: "https://www.linkedin.com/in/neuronet-ai-solutions-195a3a375?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_view_base_contact_details%3Bs8ztd73jQaaTEVdG5lXMLw%3D%3D", name: "linkedin" },
                     { icon: Twitter, href: "#", name: "twitter" },
@@ -296,10 +304,10 @@ export default function Contact() {
                       <a
                         key={social.name}
                         href={social.href}
-                        className="w-14 h-14 bg-gradient-to-r from-electric-blue to-blue-400 rounded-lg flex items-center justify-center hover:from-blue-400 hover:to-electric-blue transition-all duration-300 transform hover:scale-110 shadow-lg hover:shadow-electric-blue/50"
+                        className="w-12 h-12 sm:w-14 sm:h-14 bg-gradient-to-r from-electric-blue to-blue-400 rounded-lg flex items-center justify-center hover:from-blue-400 hover:to-electric-blue transition-all duration-300 transform hover:scale-110 shadow-lg hover:shadow-electric-blue/50"
                         aria-label={`Follow us on ${social.name}`}
                       >
-                        <Icon className="w-7 h-7 text-black font-bold" />
+                        <Icon className="w-6 h-6 sm:w-7 sm:h-7 text-black font-bold" />
                       </a>
                     );
                   })}
