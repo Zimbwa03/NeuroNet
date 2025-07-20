@@ -351,32 +351,35 @@ export default function Chatbot() {
           className="w-16 h-16 rounded-full bg-gradient-to-r from-electric-blue to-blue-400 hover:from-blue-400 hover:to-electric-blue shadow-lg hover:shadow-electric-blue/50 transition-all duration-300 transform hover:scale-110"
         >
           <div className="relative">
-            <div className="w-9 h-9 relative">
+            <div className="w-10 h-10 relative">
               <svg viewBox="0 0 100 100" className="w-full h-full">
-                <g fill="none" stroke="currentColor" strokeWidth="3" className="text-black">
-                  {/* Brain outline */}
-                  <path d="M25 30 Q20 25 25 20 Q30 15 40 20 Q50 10 65 15 Q75 20 75 30 Q80 35 75 45 Q80 55 75 65 Q70 75 60 75 Q50 80 40 75 Q30 75 25 65 Q20 55 25 45 Q20 35 25 30 Z" />
+                {/* Background circle for better contrast */}
+                <circle cx="50" cy="50" r="45" fill="rgba(0,0,0,0.3)" stroke="none" />
+                
+                <g fill="none" stroke="currentColor" strokeWidth="4" className="text-black">
+                  {/* Brain outline - simplified and bolder */}
+                  <path d="M25 35 Q20 30 25 25 Q30 20 40 25 Q50 15 65 20 Q75 25 75 35 Q80 40 75 50 Q80 60 75 70 Q70 80 60 80 Q50 85 40 80 Q30 80 25 70 Q20 60 25 50 Q20 40 25 35 Z" strokeWidth="5" />
                   
-                  {/* Neural network nodes */}
-                  <circle cx="35" cy="30" r="3" fill="currentColor" />
-                  <circle cx="50" cy="25" r="3" fill="currentColor" />
-                  <circle cx="65" cy="35" r="3" fill="currentColor" />
-                  <circle cx="40" cy="45" r="3" fill="currentColor" />
-                  <circle cx="60" cy="50" r="3" fill="currentColor" />
-                  <circle cx="45" cy="60" r="3" fill="currentColor" />
+                  {/* Neural network nodes - larger and more visible */}
+                  <circle cx="35" cy="35" r="4" fill="currentColor" strokeWidth="2" />
+                  <circle cx="50" cy="30" r="4" fill="currentColor" strokeWidth="2" />
+                  <circle cx="65" cy="40" r="4" fill="currentColor" strokeWidth="2" />
+                  <circle cx="40" cy="50" r="4" fill="currentColor" strokeWidth="2" />
+                  <circle cx="60" cy="55" r="4" fill="currentColor" strokeWidth="2" />
+                  <circle cx="45" cy="65" r="4" fill="currentColor" strokeWidth="2" />
                   
-                  {/* Neural connections */}
-                  <line x1="35" y1="30" x2="50" y2="25" strokeWidth="2" />
-                  <line x1="50" y1="25" x2="65" y2="35" strokeWidth="2" />
-                  <line x1="35" y1="30" x2="40" y2="45" strokeWidth="2" />
-                  <line x1="65" y1="35" x2="60" y2="50" strokeWidth="2" />
-                  <line x1="40" y1="45" x2="60" y2="50" strokeWidth="2" />
-                  <line x1="40" y1="45" x2="45" y2="60" strokeWidth="2" />
-                  <line x1="60" y1="50" x2="45" y2="60" strokeWidth="2" />
+                  {/* Neural connections - thicker lines */}
+                  <line x1="35" y1="35" x2="50" y2="30" strokeWidth="3" />
+                  <line x1="50" y1="30" x2="65" y2="40" strokeWidth="3" />
+                  <line x1="35" y1="35" x2="40" y2="50" strokeWidth="3" />
+                  <line x1="65" y1="40" x2="60" y2="55" strokeWidth="3" />
+                  <line x1="40" y1="50" x2="60" y2="55" strokeWidth="3" />
+                  <line x1="40" y1="50" x2="45" y2="65" strokeWidth="3" />
+                  <line x1="60" y1="55" x2="45" y2="65" strokeWidth="3" />
                 </g>
               </svg>
             </div>
-            <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-400 rounded-full animate-pulse"></div>
+            <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-400 rounded-full animate-pulse border-2 border-white"></div>
           </div>
         </Button>
       )}
@@ -389,28 +392,31 @@ export default function Chatbot() {
             <div className="flex items-center space-x-3">
               <div className="relative">
                 <div className="w-10 h-10 bg-gradient-to-r from-electric-blue to-blue-400 rounded-full flex items-center justify-center">
-                  <div className="w-7 h-7 relative">
+                  <div className="w-8 h-8 relative">
                     <svg viewBox="0 0 100 100" className="w-full h-full">
-                      <g fill="none" stroke="currentColor" strokeWidth="3" className="text-black">
-                        {/* Brain outline */}
-                        <path d="M25 30 Q20 25 25 20 Q30 15 40 20 Q50 10 65 15 Q75 20 75 30 Q80 35 75 45 Q80 55 75 65 Q70 75 60 75 Q50 80 40 75 Q30 75 25 65 Q20 55 25 45 Q20 35 25 30 Z" />
+                      {/* Background circle for better contrast */}
+                      <circle cx="50" cy="50" r="45" fill="rgba(0,0,0,0.2)" stroke="none" />
+                      
+                      <g fill="none" stroke="currentColor" strokeWidth="4" className="text-black">
+                        {/* Brain outline - clearer and bolder */}
+                        <path d="M25 35 Q20 30 25 25 Q30 20 40 25 Q50 15 65 20 Q75 25 75 35 Q80 40 75 50 Q80 60 75 70 Q70 80 60 80 Q50 85 40 80 Q30 80 25 70 Q20 60 25 50 Q20 40 25 35 Z" strokeWidth="5" />
                         
-                        {/* Neural network nodes */}
-                        <circle cx="35" cy="30" r="3" fill="currentColor" />
-                        <circle cx="50" cy="25" r="3" fill="currentColor" />
-                        <circle cx="65" cy="35" r="3" fill="currentColor" />
-                        <circle cx="40" cy="45" r="3" fill="currentColor" />
-                        <circle cx="60" cy="50" r="3" fill="currentColor" />
-                        <circle cx="45" cy="60" r="3" fill="currentColor" />
+                        {/* Neural network nodes - larger */}
+                        <circle cx="35" cy="35" r="4" fill="currentColor" strokeWidth="2" />
+                        <circle cx="50" cy="30" r="4" fill="currentColor" strokeWidth="2" />
+                        <circle cx="65" cy="40" r="4" fill="currentColor" strokeWidth="2" />
+                        <circle cx="40" cy="50" r="4" fill="currentColor" strokeWidth="2" />
+                        <circle cx="60" cy="55" r="4" fill="currentColor" strokeWidth="2" />
+                        <circle cx="45" cy="65" r="4" fill="currentColor" strokeWidth="2" />
                         
-                        {/* Neural connections */}
-                        <line x1="35" y1="30" x2="50" y2="25" strokeWidth="2" />
-                        <line x1="50" y1="25" x2="65" y2="35" strokeWidth="2" />
-                        <line x1="35" y1="30" x2="40" y2="45" strokeWidth="2" />
-                        <line x1="65" y1="35" x2="60" y2="50" strokeWidth="2" />
-                        <line x1="40" y1="45" x2="60" y2="50" strokeWidth="2" />
-                        <line x1="40" y1="45" x2="45" y2="60" strokeWidth="2" />
-                        <line x1="60" y1="50" x2="45" y2="60" strokeWidth="2" />
+                        {/* Neural connections - thicker */}
+                        <line x1="35" y1="35" x2="50" y2="30" strokeWidth="3" />
+                        <line x1="50" y1="30" x2="65" y2="40" strokeWidth="3" />
+                        <line x1="35" y1="35" x2="40" y2="50" strokeWidth="3" />
+                        <line x1="65" y1="40" x2="60" y2="55" strokeWidth="3" />
+                        <line x1="40" y1="50" x2="60" y2="55" strokeWidth="3" />
+                        <line x1="40" y1="50" x2="45" y2="65" strokeWidth="3" />
+                        <line x1="60" y1="55" x2="45" y2="65" strokeWidth="3" />
                       </g>
                     </svg>
                   </div>
@@ -472,28 +478,31 @@ export default function Chatbot() {
                   message.isBot ? "order-1 mr-2 bg-gradient-to-r from-electric-blue to-blue-400" : "order-2 ml-2 bg-neutral-700"
                 }`}>
                   {message.isBot ? (
-                    <div className="w-6 h-6 relative">
+                    <div className="w-7 h-7 relative">
                       <svg viewBox="0 0 100 100" className="w-full h-full">
-                        <g fill="none" stroke="currentColor" strokeWidth="2" className="text-black">
-                          {/* Brain outline */}
-                          <path d="M25 30 Q20 25 25 20 Q30 15 40 20 Q50 10 65 15 Q75 20 75 30 Q80 35 75 45 Q80 55 75 65 Q70 75 60 75 Q50 80 40 75 Q30 75 25 65 Q20 55 25 45 Q20 35 25 30 Z" />
+                        {/* Background circle for better contrast */}
+                        <circle cx="50" cy="50" r="45" fill="rgba(0,0,0,0.2)" stroke="none" />
+                        
+                        <g fill="none" stroke="currentColor" strokeWidth="4" className="text-black">
+                          {/* Brain outline - clearer */}
+                          <path d="M25 35 Q20 30 25 25 Q30 20 40 25 Q50 15 65 20 Q75 25 75 35 Q80 40 75 50 Q80 60 75 70 Q70 80 60 80 Q50 85 40 80 Q30 80 25 70 Q20 60 25 50 Q20 40 25 35 Z" strokeWidth="5" />
                           
                           {/* Neural network nodes */}
-                          <circle cx="35" cy="30" r="2" fill="currentColor" />
-                          <circle cx="50" cy="25" r="2" fill="currentColor" />
-                          <circle cx="65" cy="35" r="2" fill="currentColor" />
-                          <circle cx="40" cy="45" r="2" fill="currentColor" />
-                          <circle cx="60" cy="50" r="2" fill="currentColor" />
-                          <circle cx="45" cy="60" r="2" fill="currentColor" />
+                          <circle cx="35" cy="35" r="3" fill="currentColor" strokeWidth="2" />
+                          <circle cx="50" cy="30" r="3" fill="currentColor" strokeWidth="2" />
+                          <circle cx="65" cy="40" r="3" fill="currentColor" strokeWidth="2" />
+                          <circle cx="40" cy="50" r="3" fill="currentColor" strokeWidth="2" />
+                          <circle cx="60" cy="55" r="3" fill="currentColor" strokeWidth="2" />
+                          <circle cx="45" cy="65" r="3" fill="currentColor" strokeWidth="2" />
                           
                           {/* Neural connections */}
-                          <line x1="35" y1="30" x2="50" y2="25" />
-                          <line x1="50" y1="25" x2="65" y2="35" />
-                          <line x1="35" y1="30" x2="40" y2="45" />
-                          <line x1="65" y1="35" x2="60" y2="50" />
-                          <line x1="40" y1="45" x2="60" y2="50" />
-                          <line x1="40" y1="45" x2="45" y2="60" />
-                          <line x1="60" y1="50" x2="45" y2="60" />
+                          <line x1="35" y1="35" x2="50" y2="30" strokeWidth="2.5" />
+                          <line x1="50" y1="30" x2="65" y2="40" strokeWidth="2.5" />
+                          <line x1="35" y1="35" x2="40" y2="50" strokeWidth="2.5" />
+                          <line x1="65" y1="40" x2="60" y2="55" strokeWidth="2.5" />
+                          <line x1="40" y1="50" x2="60" y2="55" strokeWidth="2.5" />
+                          <line x1="40" y1="50" x2="45" y2="65" strokeWidth="2.5" />
+                          <line x1="60" y1="55" x2="45" y2="65" strokeWidth="2.5" />
                         </g>
                       </svg>
                     </div>
@@ -509,28 +518,31 @@ export default function Chatbot() {
               <div className="flex justify-start">
                 <div className="flex items-center space-x-2">
                   <div className="w-8 h-8 rounded-full bg-gradient-to-r from-electric-blue to-blue-400 flex items-center justify-center">
-                    <div className="w-5 h-5 relative">
+                    <div className="w-6 h-6 relative">
                       <svg viewBox="0 0 100 100" className="w-full h-full">
-                        <g fill="none" stroke="currentColor" strokeWidth="3" className="text-black">
-                          {/* Brain outline */}
-                          <path d="M25 30 Q20 25 25 20 Q30 15 40 20 Q50 10 65 15 Q75 20 75 30 Q80 35 75 45 Q80 55 75 65 Q70 75 60 75 Q50 80 40 75 Q30 75 25 65 Q20 55 25 45 Q20 35 25 30 Z" />
+                        {/* Background circle for better contrast */}
+                        <circle cx="50" cy="50" r="45" fill="rgba(0,0,0,0.2)" stroke="none" />
+                        
+                        <g fill="none" stroke="currentColor" strokeWidth="4" className="text-black">
+                          {/* Brain outline - clearer */}
+                          <path d="M25 35 Q20 30 25 25 Q30 20 40 25 Q50 15 65 20 Q75 25 75 35 Q80 40 75 50 Q80 60 75 70 Q70 80 60 80 Q50 85 40 80 Q30 80 25 70 Q20 60 25 50 Q20 40 25 35 Z" strokeWidth="5" />
                           
                           {/* Neural network nodes */}
-                          <circle cx="35" cy="30" r="2" fill="currentColor" />
-                          <circle cx="50" cy="25" r="2" fill="currentColor" />
-                          <circle cx="65" cy="35" r="2" fill="currentColor" />
-                          <circle cx="40" cy="45" r="2" fill="currentColor" />
-                          <circle cx="60" cy="50" r="2" fill="currentColor" />
-                          <circle cx="45" cy="60" r="2" fill="currentColor" />
+                          <circle cx="35" cy="35" r="3" fill="currentColor" strokeWidth="2" />
+                          <circle cx="50" cy="30" r="3" fill="currentColor" strokeWidth="2" />
+                          <circle cx="65" cy="40" r="3" fill="currentColor" strokeWidth="2" />
+                          <circle cx="40" cy="50" r="3" fill="currentColor" strokeWidth="2" />
+                          <circle cx="60" cy="55" r="3" fill="currentColor" strokeWidth="2" />
+                          <circle cx="45" cy="65" r="3" fill="currentColor" strokeWidth="2" />
                           
                           {/* Neural connections */}
-                          <line x1="35" y1="30" x2="50" y2="25" strokeWidth="1.5" />
-                          <line x1="50" y1="25" x2="65" y2="35" strokeWidth="1.5" />
-                          <line x1="35" y1="30" x2="40" y2="45" strokeWidth="1.5" />
-                          <line x1="65" y1="35" x2="60" y2="50" strokeWidth="1.5" />
-                          <line x1="40" y1="45" x2="60" y2="50" strokeWidth="1.5" />
-                          <line x1="40" y1="45" x2="45" y2="60" strokeWidth="1.5" />
-                          <line x1="60" y1="50" x2="45" y2="60" strokeWidth="1.5" />
+                          <line x1="35" y1="35" x2="50" y2="30" strokeWidth="2.5" />
+                          <line x1="50" y1="30" x2="65" y2="40" strokeWidth="2.5" />
+                          <line x1="35" y1="35" x2="40" y2="50" strokeWidth="2.5" />
+                          <line x1="65" y1="40" x2="60" y2="55" strokeWidth="2.5" />
+                          <line x1="40" y1="50" x2="60" y2="55" strokeWidth="2.5" />
+                          <line x1="40" y1="50" x2="45" y2="65" strokeWidth="2.5" />
+                          <line x1="60" y1="55" x2="45" y2="65" strokeWidth="2.5" />
                         </g>
                       </svg>
                     </div>
