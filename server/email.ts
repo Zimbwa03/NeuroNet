@@ -64,6 +64,24 @@ export class EmailService {
     }
   }
 
+  async sendNewsletter(toEmail: string, content: { subject: string; html: string; text: string }): Promise<boolean> {
+    try {
+      await this.transporter.sendMail({
+        from: `NeuroNet AI Solutions <${this.config.fromEmail}>`,
+        to: toEmail,
+        subject: content.subject,
+        text: content.text,
+        html: content.html,
+      });
+
+      console.log(`Newsletter sent to: ${toEmail}`);
+      return true;
+    } catch (error) {
+      console.error(`Failed to send newsletter to ${toEmail}:`, error);
+      return false;
+    }
+  }
+
   async testConnection(): Promise<boolean> {
     try {
       console.log('Testing email connection with config:', {

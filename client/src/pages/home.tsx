@@ -1,15 +1,18 @@
+import { Link } from "wouter";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { ArrowRight, Brain, Zap, TrendingUp, Users, CheckCircle, Star, Quote } from "lucide-react";
 import Hero from "@/components/sections/hero";
 import ServicesOverview from "@/components/sections/services-overview";
 import Testimonials from "@/components/sections/testimonials";
-import { Link } from "wouter";
-import { Button } from "@/components/ui/button";
+import NewsletterSignup from "@/components/newsletter/newsletter-signup";
 
 export default function Home() {
   return (
     <div>
       <Hero />
       <ServicesOverview />
-      
+
       {/* How It Works Section */}
       <section className="py-20 bg-black">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -59,6 +62,13 @@ export default function Home() {
 
       <Testimonials />
 
+      {/* Newsletter Signup Section */}
+      <section className="py-20 bg-neutral-900">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <NewsletterSignup variant="hero" />
+        </div>
+      </section>
+
       {/* CTA Section */}
       <section className="py-20 bg-neutral-900 relative overflow-hidden">
         <div className="absolute inset-0">
@@ -68,7 +78,7 @@ export default function Home() {
             className="w-full h-full object-cover opacity-20"
           />
         </div>
-        
+
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-5xl font-bold mb-6">
             Ready to <span className="text-electric-blue">Transform</span> Your Business?

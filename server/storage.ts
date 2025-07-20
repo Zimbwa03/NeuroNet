@@ -1,4 +1,4 @@
-import { users, contacts, type User, type InsertUser, type Contact, type InsertContact } from "@shared/schema";
+import { users, contacts, emailSubscriptions, insertUserSchema, insertContactSchema, insertEmailSubscriptionSchema, type InsertUser, type InsertContact, type InsertEmailSubscription } from "@shared/schema";
 import { db } from "./db";
 import { eq } from "drizzle-orm";
 
@@ -39,6 +39,34 @@ export class DatabaseStorage implements IStorage {
 
   async getContacts(): Promise<Contact[]> {
     return await db.select().from(contacts).orderBy(contacts.createdAt);
+  }
+
+  async createEmailSubscription(data: InsertEmailSubscription) {
+    const validatedData = insertEmailSubscriptionSchema.parse(data);
+    const [subscription] = await db.insert(emailSubscriptions).values(validatedData).returning();
+    return subscription;
+  }
+
+  async getEmailSubscriptions(activeOnly = true) {
+    const query = db.select().from(emailSubscriptions);
+    if (activeOnly) {
+      return await query.where(eq(emailSubscriptions.isActive, true));
+    }
+    return await query.execute();
+  }
+
+  async updateLastEmailSent(email: string) {
+    await db
+      .update(emailSubscriptions)
+      .set({ lastEmailSent: new Date() })
+      .where(eq(emailSubscriptions.email, email));
+  }
+
+  async unsubscribeEmail(email: string) {
+    await db
+      .update(emailSubscriptions)
+      .set({ isActive: false })
+      .where(eq(emailSubscriptions.email, email));
   }
 }
 

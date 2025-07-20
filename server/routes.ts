@@ -1,12 +1,14 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertContactSchema } from "@shared/schema";
+import { insertContactSchema, insertEmailSubscriptionSchema } from "@shared/schema";
 import { createEmailService } from "./email";
+import { createNewsletterService } from "./newsletter";
 import { queryDeepSeek } from "./deepseek";
 import { z } from "zod";
 
 const emailService = createEmailService();
+const newsletterService = createNewsletterService(emailService);
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Contact form submission
@@ -54,6 +56,123 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({ 
         success: false, 
         message: "Failed to retrieve contacts" 
+      });
+    }
+  });
+
+  // Email subscription endpoint
+  app.post("/api/subscribe", async (req, res) => {
+    try {
+      const { email } = req.body;
+      
+      if (!email || typeof email !== 'string') {
+        return res.status(400).json({ 
+          success: false, 
+          message: "Email is required" 
+        });
+      }
+
+      // Validate email format
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        return res.status(400).json({ 
+          success: false, 
+          message: "Please enter a valid email address" 
+        });
+      }
+
+      const validatedData = insertEmailSubscriptionSchema.parse({ email });
+      
+      try {
+        const subscription = await storage.createEmailSubscription(validatedData);
+        res.status(201).json({ 
+          success: true, 
+          message: "Successfully subscribed to our daily AI business tips!",
+          subscription
+        });
+      } catch (error: any) {
+        // Handle duplicate email
+        if (error.code === '23505') {
+          res.status(409).json({ 
+            success: false, 
+            message: "This email is already subscribed to our newsletter." 
+          });
+        } else {
+          throw error;
+        }
+      }
+    } catch (error) {
+      console.error('Email subscription error:', error);
+      res.status(500).json({ 
+        success: false, 
+        message: "Failed to subscribe to newsletter" 
+      });
+    }
+  });
+
+  // Unsubscribe endpoint
+  app.get("/api/unsubscribe", async (req, res) => {
+    try {
+      const { email } = req.query;
+      
+      if (!email || typeof email !== 'string') {
+        return res.status(400).json({ 
+          success: false, 
+          message: "Email is required" 
+        });
+      }
+
+      await storage.unsubscribeEmail(email);
+      res.json({ 
+        success: true, 
+        message: "Successfully unsubscribed from our newsletter." 
+      });
+    } catch (error) {
+      console.error('Unsubscribe error:', error);
+      res.status(500).json({ 
+        success: false, 
+        message: "Failed to unsubscribe" 
+      });
+    }
+  });
+
+  // Manual newsletter send endpoint (for testing)
+  app.post("/api/admin/send-newsletter", async (req, res) => {
+    try {
+      const results = await newsletterService.sendDailyNewsletter();
+      res.json({ 
+        success: true, 
+        message: "Newsletter sent successfully",
+        results
+      });
+    } catch (error) {
+      console.error('Newsletter send error:', error);
+      res.status(500).json({ 
+        success: false, 
+        message: "Failed to send newsletter" 
+      });
+    }
+  });
+
+  // Get subscription stats
+  app.get("/api/admin/newsletter-stats", async (req, res) => {
+    try {
+      const activeSubscriptions = await storage.getEmailSubscriptions(true);
+      const totalSubscriptions = await storage.getEmailSubscriptions(false);
+      
+      res.json({ 
+        success: true, 
+        stats: {
+          activeSubscribers: activeSubscriptions.length,
+          totalSubscribers: totalSubscriptions.length,
+          recentSubscribers: totalSubscriptions.slice(0, 5)
+        }
+      });
+    } catch (error) {
+      console.error('Newsletter stats error:', error);
+      res.status(500).json({ 
+        success: false, 
+        message: "Failed to get newsletter stats" 
       });
     }
   });

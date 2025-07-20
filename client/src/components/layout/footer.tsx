@@ -1,5 +1,6 @@
 import { Link } from "wouter";
-import BrainLogo from "@/components/ui/brain-logo";
+import { Brain, Mail, Phone, MapPin, Linkedin, Twitter, Facebook } from "lucide-react";
+import NewsletterSignup from "@/components/newsletter/newsletter-signup";
 
 export default function Footer() {
   return (
@@ -74,6 +75,33 @@ export default function Footer() {
                 </Link>
               </li>
             </ul>
+          </div>
+
+          <div>
+            <h3 className="text-lg font-semibold mb-4">Daily AI Tips</h3>
+            <NewsletterSignup variant="compact" className="mb-6" />
+
+            <h4 className="text-md font-semibold mb-4">Connect With Us</h4>
+            <div className="flex space-x-4">
+              <a
+                href="https://www.linkedin.com/in/neuronet-ai-solutions-195a3a375?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_view_base_contact_details%3Bs8ztd73jQaaTEVdG5lXMLw%3D%3D"
+                className="p-2 bg-electric-blue rounded-lg hover:bg-blue-400 transition-colors"
+              >
+                <Linkedin className="w-5 h-5 text-black" />
+              </a>
+              <a
+                href="#"
+                className="p-2 bg-electric-blue rounded-lg hover:bg-blue-400 transition-colors"
+              >
+                <Twitter className="w-5 h-5 text-black" />
+              </a>
+              <a
+                href="#"
+                className="p-2 bg-electric-blue rounded-lg hover:bg-blue-400 transition-colors"
+              >
+                <Facebook className="w-5 h-5 text-black" />
+              </a>
+            </div>
           </div>
         </div>
       </div>
