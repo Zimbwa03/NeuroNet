@@ -115,7 +115,22 @@ export default function Chatbot() {
       }
 
       const data = await response.json();
-      return data.response;
+      
+      // Clean up markdown formatting from the response
+      let cleanedResponse = data.response;
+      
+      // Remove markdown bold/italic formatting
+      cleanedResponse = cleanedResponse.replace(/\*\*(.*?)\*\*/g, '$1');
+      cleanedResponse = cleanedResponse.replace(/\*(.*?)\*/g, '$1');
+      
+      // Replace markdown bullet points with simple text
+      cleanedResponse = cleanedResponse.replace(/^[\s]*[-*+]\s+/gm, '• ');
+      
+      // Clean up multiple spaces and line breaks
+      cleanedResponse = cleanedResponse.replace(/\s{3,}/g, ' ');
+      cleanedResponse = cleanedResponse.replace(/\n{3,}/g, '\n\n');
+      
+      return cleanedResponse;
     } catch (error) {
       console.error('AI query error:', error);
       return "I'm having trouble with my advanced AI features right now. Let me help you with our standard information, or you can contact our team directly for complex questions!";
@@ -213,7 +228,7 @@ export default function Chatbot() {
 
     if (input.includes("contact") || input.includes("reach") || input.includes("phone")) {
       return {
-        text: "Ready to connect? Here's how to reach us! 📞\n\n📱 Phone: +263 78 549 4594 / +263 78 258 3119\n📧 Email: ngonidzashezimbwa95@gmail.com\n💼 LinkedIn: NeuroNet AI Solutions\n\nYou can also fill out our contact form for a detailed response!",
+        text: "Ready to connect? Here's how to reach us!\n\nPhone: +263 78 549 4594 or +263 78 258 3119\nEmail: ngonidzashezimbwa95@gmail.com\nLinkedIn: NeuroNet AI Solutions\n\nYou can also fill out our contact form for a detailed response!",
         suggestions: ["Fill contact form", "Call now", "Schedule meeting", "Ask another question"]
       };
     }
@@ -336,7 +351,31 @@ export default function Chatbot() {
           className="w-16 h-16 rounded-full bg-gradient-to-r from-electric-blue to-blue-400 hover:from-blue-400 hover:to-electric-blue shadow-lg hover:shadow-electric-blue/50 transition-all duration-300 transform hover:scale-110"
         >
           <div className="relative">
-            <Bot className="w-8 h-8 text-black" />
+            <div className="w-9 h-9 relative">
+              <svg viewBox="0 0 100 100" className="w-full h-full">
+                <g fill="none" stroke="currentColor" strokeWidth="3" className="text-black">
+                  {/* Brain outline */}
+                  <path d="M25 30 Q20 25 25 20 Q30 15 40 20 Q50 10 65 15 Q75 20 75 30 Q80 35 75 45 Q80 55 75 65 Q70 75 60 75 Q50 80 40 75 Q30 75 25 65 Q20 55 25 45 Q20 35 25 30 Z" />
+                  
+                  {/* Neural network nodes */}
+                  <circle cx="35" cy="30" r="3" fill="currentColor" />
+                  <circle cx="50" cy="25" r="3" fill="currentColor" />
+                  <circle cx="65" cy="35" r="3" fill="currentColor" />
+                  <circle cx="40" cy="45" r="3" fill="currentColor" />
+                  <circle cx="60" cy="50" r="3" fill="currentColor" />
+                  <circle cx="45" cy="60" r="3" fill="currentColor" />
+                  
+                  {/* Neural connections */}
+                  <line x1="35" y1="30" x2="50" y2="25" strokeWidth="2" />
+                  <line x1="50" y1="25" x2="65" y2="35" strokeWidth="2" />
+                  <line x1="35" y1="30" x2="40" y2="45" strokeWidth="2" />
+                  <line x1="65" y1="35" x2="60" y2="50" strokeWidth="2" />
+                  <line x1="40" y1="45" x2="60" y2="50" strokeWidth="2" />
+                  <line x1="40" y1="45" x2="45" y2="60" strokeWidth="2" />
+                  <line x1="60" y1="50" x2="45" y2="60" strokeWidth="2" />
+                </g>
+              </svg>
+            </div>
             <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-400 rounded-full animate-pulse"></div>
           </div>
         </Button>
@@ -350,7 +389,31 @@ export default function Chatbot() {
             <div className="flex items-center space-x-3">
               <div className="relative">
                 <div className="w-10 h-10 bg-gradient-to-r from-electric-blue to-blue-400 rounded-full flex items-center justify-center">
-                  <Bot className="w-6 h-6 text-black" />
+                  <div className="w-7 h-7 relative">
+                    <svg viewBox="0 0 100 100" className="w-full h-full">
+                      <g fill="none" stroke="currentColor" strokeWidth="3" className="text-black">
+                        {/* Brain outline */}
+                        <path d="M25 30 Q20 25 25 20 Q30 15 40 20 Q50 10 65 15 Q75 20 75 30 Q80 35 75 45 Q80 55 75 65 Q70 75 60 75 Q50 80 40 75 Q30 75 25 65 Q20 55 25 45 Q20 35 25 30 Z" />
+                        
+                        {/* Neural network nodes */}
+                        <circle cx="35" cy="30" r="3" fill="currentColor" />
+                        <circle cx="50" cy="25" r="3" fill="currentColor" />
+                        <circle cx="65" cy="35" r="3" fill="currentColor" />
+                        <circle cx="40" cy="45" r="3" fill="currentColor" />
+                        <circle cx="60" cy="50" r="3" fill="currentColor" />
+                        <circle cx="45" cy="60" r="3" fill="currentColor" />
+                        
+                        {/* Neural connections */}
+                        <line x1="35" y1="30" x2="50" y2="25" strokeWidth="2" />
+                        <line x1="50" y1="25" x2="65" y2="35" strokeWidth="2" />
+                        <line x1="35" y1="30" x2="40" y2="45" strokeWidth="2" />
+                        <line x1="65" y1="35" x2="60" y2="50" strokeWidth="2" />
+                        <line x1="40" y1="45" x2="60" y2="50" strokeWidth="2" />
+                        <line x1="40" y1="45" x2="45" y2="60" strokeWidth="2" />
+                        <line x1="60" y1="50" x2="45" y2="60" strokeWidth="2" />
+                      </g>
+                    </svg>
+                  </div>
                 </div>
                 <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-400 rounded-full border-2 border-black"></div>
               </div>
@@ -370,10 +433,10 @@ export default function Chatbot() {
           </div>
 
           {/* Messages */}
-          <CardContent className="h-64 overflow-y-auto p-4 space-y-4">
+          <CardContent className="h-64 overflow-y-auto p-4 space-y-4 scrollbar-thin scrollbar-thumb-electric-blue/50">
             {messages.map((message) => (
               <div key={message.id} className={`flex ${message.isBot ? "justify-start" : "justify-end"}`}>
-                <div className={`max-w-[70%] ${message.isBot ? "order-2" : "order-1"}`}>
+                <div className={`max-w-[75%] ${message.isBot ? "order-2" : "order-1"}`}>
                   <div className={`p-3 rounded-lg ${
                     message.isBot 
                       ? "bg-neutral-800 text-white" 
@@ -385,7 +448,7 @@ export default function Chatbot() {
                         <span>AI-Powered Response</span>
                       </div>
                     )}
-                    <p className="text-sm whitespace-pre-line">{message.text}</p>
+                    <p className="text-sm whitespace-pre-line break-words leading-relaxed">{message.text}</p>
                   </div>
                   
                   {/* Suggestions */}
@@ -406,10 +469,34 @@ export default function Chatbot() {
                 </div>
                 
                 <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                  message.isBot ? "order-1 mr-2 bg-electric-blue" : "order-2 ml-2 bg-neutral-700"
+                  message.isBot ? "order-1 mr-2 bg-gradient-to-r from-electric-blue to-blue-400" : "order-2 ml-2 bg-neutral-700"
                 }`}>
                   {message.isBot ? (
-                    <Bot className="w-4 h-4 text-black" />
+                    <div className="w-6 h-6 relative">
+                      <svg viewBox="0 0 100 100" className="w-full h-full">
+                        <g fill="none" stroke="currentColor" strokeWidth="2" className="text-black">
+                          {/* Brain outline */}
+                          <path d="M25 30 Q20 25 25 20 Q30 15 40 20 Q50 10 65 15 Q75 20 75 30 Q80 35 75 45 Q80 55 75 65 Q70 75 60 75 Q50 80 40 75 Q30 75 25 65 Q20 55 25 45 Q20 35 25 30 Z" />
+                          
+                          {/* Neural network nodes */}
+                          <circle cx="35" cy="30" r="2" fill="currentColor" />
+                          <circle cx="50" cy="25" r="2" fill="currentColor" />
+                          <circle cx="65" cy="35" r="2" fill="currentColor" />
+                          <circle cx="40" cy="45" r="2" fill="currentColor" />
+                          <circle cx="60" cy="50" r="2" fill="currentColor" />
+                          <circle cx="45" cy="60" r="2" fill="currentColor" />
+                          
+                          {/* Neural connections */}
+                          <line x1="35" y1="30" x2="50" y2="25" />
+                          <line x1="50" y1="25" x2="65" y2="35" />
+                          <line x1="35" y1="30" x2="40" y2="45" />
+                          <line x1="65" y1="35" x2="60" y2="50" />
+                          <line x1="40" y1="45" x2="60" y2="50" />
+                          <line x1="40" y1="45" x2="45" y2="60" />
+                          <line x1="60" y1="50" x2="45" y2="60" />
+                        </g>
+                      </svg>
+                    </div>
                   ) : (
                     <User className="w-4 h-4 text-white" />
                   )}
@@ -421,8 +508,32 @@ export default function Chatbot() {
             {isTyping && (
               <div className="flex justify-start">
                 <div className="flex items-center space-x-2">
-                  <div className="w-8 h-8 rounded-full bg-electric-blue flex items-center justify-center">
-                    <Bot className="w-4 h-4 text-black" />
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-r from-electric-blue to-blue-400 flex items-center justify-center">
+                    <div className="w-5 h-5 relative">
+                      <svg viewBox="0 0 100 100" className="w-full h-full">
+                        <g fill="none" stroke="currentColor" strokeWidth="3" className="text-black">
+                          {/* Brain outline */}
+                          <path d="M25 30 Q20 25 25 20 Q30 15 40 20 Q50 10 65 15 Q75 20 75 30 Q80 35 75 45 Q80 55 75 65 Q70 75 60 75 Q50 80 40 75 Q30 75 25 65 Q20 55 25 45 Q20 35 25 30 Z" />
+                          
+                          {/* Neural network nodes */}
+                          <circle cx="35" cy="30" r="2" fill="currentColor" />
+                          <circle cx="50" cy="25" r="2" fill="currentColor" />
+                          <circle cx="65" cy="35" r="2" fill="currentColor" />
+                          <circle cx="40" cy="45" r="2" fill="currentColor" />
+                          <circle cx="60" cy="50" r="2" fill="currentColor" />
+                          <circle cx="45" cy="60" r="2" fill="currentColor" />
+                          
+                          {/* Neural connections */}
+                          <line x1="35" y1="30" x2="50" y2="25" strokeWidth="1.5" />
+                          <line x1="50" y1="25" x2="65" y2="35" strokeWidth="1.5" />
+                          <line x1="35" y1="30" x2="40" y2="45" strokeWidth="1.5" />
+                          <line x1="65" y1="35" x2="60" y2="50" strokeWidth="1.5" />
+                          <line x1="40" y1="45" x2="60" y2="50" strokeWidth="1.5" />
+                          <line x1="40" y1="45" x2="45" y2="60" strokeWidth="1.5" />
+                          <line x1="60" y1="50" x2="45" y2="60" strokeWidth="1.5" />
+                        </g>
+                      </svg>
+                    </div>
                   </div>
                   <div className="bg-neutral-800 rounded-lg p-3">
                     <div className="flex space-x-1">

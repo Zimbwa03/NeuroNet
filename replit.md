@@ -113,3 +113,15 @@ The application uses PostgreSQL with two main tables:
 - Neural network-inspired visual design elements
 - Automatic email notifications for contact form submissions
 - Global market positioning (removed Zimbabwe-specific references)
+- Intelligent AI chatbot "Neury" with DeepSeek integration
+- Smart response system: AI for complex queries, preset for simple ones
+- Custom brain logo SVG integration throughout chatbot interface
+- Proper text formatting and responsive chat window design
+
+### Recent Changes (July 20, 2025)
+- Enhanced chatbot formatting: removed markdown artifacts from AI responses
+- Integrated custom brain logo SVG for Neury's avatar across all instances
+- Improved chat window layout with proper text wrapping and spacing
+- Added AI-powered response indicators to distinguish AI vs preset responses
+- Optimized DeepSeek integration guidelines to prevent formatting issues
+- Updated contact information display to prevent overflow in chat window
