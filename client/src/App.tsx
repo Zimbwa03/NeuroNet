@@ -1,10 +1,10 @@
 
+import { useEffect } from "react";
 import { Switch, Route, useLocation } from "wouter";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "@/lib/queryClient";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { useAnalytics } from "@/hooks/use-analytics";
-import { useEffect } from "react";
 
 // Import pages
 import Home from "@/pages/home";

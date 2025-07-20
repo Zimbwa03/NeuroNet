@@ -2,7 +2,9 @@
 
 ## Overview
 
-This is a full-stack web application for NeuroNet AI Solutions, a professional AI consulting and automation company based in Zimbabwe. The application serves as a comprehensive business website with contact management capabilities, built using modern web technologies.
+This is a full-stack web application for NeuroNet AI Solutions, a professional AI consulting and automation company. The application serves as a comprehensive business website with contact management capabilities, AI chatbot integration, analytics tracking, and email automation features. Built using modern web technologies.
+
+**Note**: This is NOT a calculator application as mentioned in some descriptions, but rather a complete business website for an AI consulting company.
 
 ## User Preferences
 

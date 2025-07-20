@@ -251,4 +251,6 @@ export function registerRoutes(app: Express) {
       });
     }
   });
+
+  return app;
 }
