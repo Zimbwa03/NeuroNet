@@ -13,7 +13,7 @@ import HowItWorks from "@/pages/how-it-works";
 import About from "@/pages/about";
 import Contact from "@/pages/contact";
 import Portfolio from "@/pages/portfolio";
-import Pricing from "@/pages/pricing";
+
 import Blog from "@/pages/blog";
 import AdminAnalytics from "@/pages/admin-analytics";
 import NotFound from "@/pages/not-found";
@@ -45,7 +45,7 @@ function App() {
               <Route path="/about" component={About} />
               <Route path="/contact" component={Contact} />
               <Route path="/portfolio" component={Portfolio} />
-              <Route path="/pricing" component={Pricing} />
+
               <Route path="/blog" component={Blog} />
               <Route path="/admin/analytics" component={AdminAnalytics} />
               <Route component={NotFound} />
