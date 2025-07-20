@@ -626,20 +626,21 @@ export default function Chatbot() {
           </CardContent>
 
           {/* Input */}
-          <div className="p-4 border-t border-electric-blue/30">
-            <div className="flex space-x-2">
+          <div className="p-4 border-t border-electric-blue/30 bg-black">
+            <div className="flex items-center space-x-2">
               <input
                 type="text"
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 onKeyPress={handleKeyPress}
                 placeholder="Ask me anything about AI..."
-                className="flex-1 px-3 py-2 bg-neutral-800 border border-electric-blue/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-electric-blue text-sm min-w-0"
+                className="flex-1 px-3 py-2 bg-neutral-800 border border-electric-blue/30 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-electric-blue text-sm min-w-0 h-10"
               />
               <Button
                 onClick={handleSendMessage}
                 disabled={!inputValue.trim()}
-                className="bg-electric-blue hover:bg-blue-400 text-black p-2 disabled:opacity-50 flex-shrink-0"
+                className="bg-electric-blue hover:bg-blue-400 text-black p-2 disabled:opacity-50 flex-shrink-0 h-10 w-10"
+                size="sm"
               >
                 <Send className="w-4 h-4" />
               </Button>
