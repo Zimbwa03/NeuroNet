@@ -66,6 +66,12 @@ export class EmailService {
 
   async testConnection(): Promise<boolean> {
     try {
+      console.log('Testing email connection with config:', {
+        host: this.config.host,
+        port: this.config.port,
+        user: this.config.user,
+        secure: this.config.secure
+      });
       await this.transporter.verify();
       console.log('Email service connection verified');
       return true;
