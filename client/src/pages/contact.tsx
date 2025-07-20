@@ -287,7 +287,7 @@ export default function Contact() {
                 <h3 className="text-2xl font-bold mb-6">Follow Us</h3>
                 <div className="flex space-x-4">
                   {[
-                    { icon: Linkedin, href: "#", name: "linkedin" },
+                    { icon: Linkedin, href: "https://www.linkedin.com/in/neuronet-ai-solutions-195a3a375?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_view_base_contact_details%3Bs8ztd73jQaaTEVdG5lXMLw%3D%3D", name: "linkedin" },
                     { icon: Twitter, href: "#", name: "twitter" },
                     { icon: Facebook, href: "#", name: "facebook" },
                   ].map((social) => {
