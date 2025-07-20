@@ -1,5 +1,6 @@
 import { Link } from "wouter";
 import { Brain, Mail, Phone, MapPin, Linkedin, Twitter, Facebook } from "lucide-react";
+import BrainLogo from "@/components/ui/brain-logo";
 import NewsletterSignup from "@/components/newsletter/newsletter-signup";
 
 export default function Footer() {
