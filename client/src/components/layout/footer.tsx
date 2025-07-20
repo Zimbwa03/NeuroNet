@@ -97,7 +97,7 @@ export default function Footer() {
                 <Twitter className="w-5 h-5 text-black" />
               </a>
               <a
-                href="#"
+                href="https://www.facebook.com/share/16tvkBUGdj/?mibextid=wwXIfr"
                 className="p-2 bg-electric-blue rounded-lg hover:bg-blue-400 transition-colors"
               >
                 <Facebook className="w-5 h-5 text-black" />
