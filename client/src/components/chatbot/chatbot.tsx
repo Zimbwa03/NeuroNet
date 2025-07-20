@@ -27,6 +27,7 @@ interface Message {
   isBot: boolean;
   timestamp: Date;
   suggestions?: string[];
+  isAI?: boolean;
 }
 
 export default function Chatbot() {
@@ -74,13 +75,14 @@ export default function Chatbot() {
     return pageNames[location];
   };
 
-  const addBotMessage = (text: string, suggestions?: string[]) => {
+  const addBotMessage = (text: string, suggestions?: string[], isAI?: boolean) => {
     const newMessage: Message = {
       id: Date.now().toString(),
       text,
       isBot: true,
       timestamp: new Date(),
-      suggestions
+      suggestions,
+      isAI
     };
     setMessages(prev => [...prev, newMessage]);
   };
@@ -93,6 +95,50 @@ export default function Chatbot() {
       timestamp: new Date()
     };
     setMessages(prev => [...prev, newMessage]);
+  };
+
+  const queryAI = async (userInput: string): Promise<string> => {
+    try {
+      const response = await fetch('/api/chatbot', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          question: userInput,
+          context: `${getCurrentPageName() || 'homepage'} - ${location}`
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to get AI response');
+      }
+
+      const data = await response.json();
+      return data.response;
+    } catch (error) {
+      console.error('AI query error:', error);
+      return "I'm having trouble with my advanced AI features right now. Let me help you with our standard information, or you can contact our team directly for complex questions!";
+    }
+  };
+
+  const shouldUseAI = (input: string): boolean => {
+    const complexKeywords = [
+      'explain', 'how does', 'why', 'what is', 'difference between', 'compare',
+      'technical', 'implementation', 'algorithm', 'machine learning', 'deep learning',
+      'neural network', 'artificial intelligence', 'methodology', 'architecture',
+      'integration', 'scalability', 'performance', 'security', 'compliance',
+      'roi calculation', 'business case', 'feasibility', 'timeline', 'resources'
+    ];
+
+    const hasComplexKeywords = complexKeywords.some(keyword => 
+      input.toLowerCase().includes(keyword)
+    );
+
+    const isLongQuestion = input.length > 50;
+    const hasMultipleQuestions = (input.match(/\?/g) || []).length > 1;
+
+    return hasComplexKeywords || isLongQuestion || hasMultipleQuestions;
   };
 
   const getBotResponse = (userInput: string): { text: string; suggestions?: string[]; actions?: string[] } => {
@@ -214,30 +260,64 @@ export default function Chatbot() {
     };
   };
 
-  const handleSendMessage = () => {
+  const handleSendMessage = async () => {
     if (inputValue.trim()) {
-      addUserMessage(inputValue);
+      const userQuestion = inputValue;
+      addUserMessage(userQuestion);
       setInputValue("");
       setIsTyping(true);
 
-      // Simulate bot typing delay
-      setTimeout(() => {
-        const response = getBotResponse(inputValue);
-        setIsTyping(false);
-        addBotMessage(response.text, response.suggestions);
-      }, 1000 + Math.random() * 1000);
+      try {
+        // Check if we should use AI for complex questions
+        if (shouldUseAI(userQuestion)) {
+          // Use AI for complex questions
+          const aiResponse = await queryAI(userQuestion);
+          setIsTyping(false);
+          addBotMessage(aiResponse, getContextualSuggestions(location), true);
+        } else {
+          // Use preset responses for simple questions
+          setTimeout(() => {
+            const response = getBotResponse(userQuestion);
+            setIsTyping(false);
+            addBotMessage(response.text, response.suggestions, false);
+          }, 800 + Math.random() * 500);
+        }
+      } catch (error) {
+        console.error('Error handling message:', error);
+        setTimeout(() => {
+          const response = getBotResponse(userQuestion);
+          setIsTyping(false);
+          addBotMessage(response.text, response.suggestions);
+        }, 800);
+      }
     }
   };
 
-  const handleSuggestionClick = (suggestion: string) => {
+  const handleSuggestionClick = async (suggestion: string) => {
     addUserMessage(suggestion);
     setIsTyping(true);
 
-    setTimeout(() => {
-      const response = getBotResponse(suggestion);
-      setIsTyping(false);
-      addBotMessage(response.text, response.suggestions);
-    }, 800);
+    try {
+      // Check if we should use AI for complex suggestions
+      if (shouldUseAI(suggestion)) {
+        const aiResponse = await queryAI(suggestion);
+        setIsTyping(false);
+        addBotMessage(aiResponse, getContextualSuggestions(location), true);
+      } else {
+        setTimeout(() => {
+          const response = getBotResponse(suggestion);
+          setIsTyping(false);
+          addBotMessage(response.text, response.suggestions, false);
+        }, 600);
+      }
+    } catch (error) {
+      console.error('Error handling suggestion:', error);
+      setTimeout(() => {
+        const response = getBotResponse(suggestion);
+        setIsTyping(false);
+        addBotMessage(response.text, response.suggestions);
+      }, 600);
+    }
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -299,6 +379,12 @@ export default function Chatbot() {
                       ? "bg-neutral-800 text-white" 
                       : "bg-electric-blue text-black"
                   }`}>
+                    {message.isBot && message.isAI && (
+                      <div className="flex items-center mb-2 text-xs text-electric-blue">
+                        <Sparkles className="w-3 h-3 mr-1" />
+                        <span>AI-Powered Response</span>
+                      </div>
+                    )}
                     <p className="text-sm whitespace-pre-line">{message.text}</p>
                   </div>
                   
