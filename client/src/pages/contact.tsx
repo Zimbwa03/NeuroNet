@@ -74,12 +74,12 @@ export default function Contact() {
     {
       icon: Phone,
       title: "Phone",
-      content: "+263 XXX XXXXX"
+      content: "+263 78 549 4594 / +263 78 258 3119"
     },
     {
       icon: Mail,
       title: "Email",
-      content: "info@neuronet.ai"
+      content: "ngonidzashezimbwa95@gmail.com"
     },
     {
       icon: Clock,
