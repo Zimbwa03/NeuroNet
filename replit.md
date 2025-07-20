@@ -127,3 +127,11 @@ The application uses PostgreSQL with two main tables:
 - Added AI-powered response indicators to distinguish AI vs preset responses
 - Optimized DeepSeek integration guidelines to prevent formatting issues
 - Updated contact information display to prevent overflow in chat window
+
+### Netlify Deployment Configuration (July 20, 2025)
+- Created Netlify-specific configuration files (netlify.toml, _redirects)
+- Added serverless functions for API endpoints (netlify/functions/api.ts, contact.ts)
+- Configured build process for static frontend and serverless backend
+- Added comprehensive deployment documentation (README-netlify.md)
+- Integrated @netlify/functions and serverless-http packages
+- Created environment variables template (.env.example)
