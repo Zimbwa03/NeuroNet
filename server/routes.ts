@@ -1,300 +1,254 @@
 import type { Express } from "express";
-import { createServer, type Server } from "http";
-import { storage } from "./storage";
-import { insertContactSchema, insertEmailSubscriptionSchema } from "@shared/schema";
-import { createEmailService } from "./email";
-import { createNewsletterService } from "./newsletter";
-import { queryDeepSeek } from "./deepseek";
+import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
+import { contacts, emailSubscriptions, pageViews, userInteractions, chatbotSessions } from "../shared/schema";
+import { supabase } from "./supabase";
 
-const emailService = createEmailService();
-const newsletterService = createNewsletterService(emailService);
+const insertContactSchema = createInsertSchema(contacts);
+const insertEmailSchema = createInsertSchema(emailSubscriptions);
 
-export async function registerRoutes(app: Express): Promise<Server> {
+export function registerRoutes(app: Express) {
   // Contact form submission
   app.post("/api/contact", async (req, res) => {
     try {
-      const validatedData = insertContactSchema.parse(req.body);
-      
-      // Save to database
-      const contact = await storage.createContact(validatedData);
-      
-      // Send email notification if email service is configured
-      let emailSent = false;
-      if (emailService) {
-        emailSent = await emailService.sendContactNotification(contact);
-      }
-      
-      res.status(201).json({ 
-        success: true, 
-        contact,
-        emailSent: emailSent || !emailService // true if sent or if email not configured
-      });
-    } catch (error) {
-      console.error('Contact form submission error:', error);
-      if (error instanceof z.ZodError) {
-        res.status(400).json({ 
-          success: false, 
-          message: "Invalid form data", 
-          errors: error.errors 
-        });
-      } else {
-        res.status(500).json({ 
-          success: false, 
-          message: "Failed to submit contact form" 
-        });
-      }
-    }
-  });
+      const contactData = insertContactSchema.parse(req.body);
 
-  // Get all contacts (for admin purposes if needed)
-  app.get("/api/contacts", async (req, res) => {
-    try {
-      const contacts = await storage.getContacts();
-      res.json(contacts);
+      const { data, error } = await supabase
+        .from('contacts')
+        .insert({
+          first_name: contactData.firstName,
+          last_name: contactData.lastName,
+          email: contactData.email,
+          company: contactData.company,
+          service_interest: contactData.serviceInterest,
+          message: contactData.message
+        })
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      res.json({ success: true, contact: data });
     } catch (error) {
+      console.error("Contact submission error:", error);
       res.status(500).json({ 
         success: false, 
-        message: "Failed to retrieve contacts" 
+        error: error instanceof Error ? error.message : "Failed to submit contact form" 
       });
     }
   });
 
-  // Email subscription endpoint
-  app.post("/api/subscribe", async (req, res) => {
+  // Newsletter subscription
+  app.post("/api/newsletter/subscribe", async (req, res) => {
     try {
-      const { email } = req.body;
-      
-      if (!email || typeof email !== 'string') {
-        return res.status(400).json({ 
-          success: false, 
-          message: "Email is required" 
-        });
-      }
+      const { email } = insertEmailSchema.parse(req.body);
 
-      // Validate email format
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(email)) {
-        return res.status(400).json({ 
-          success: false, 
-          message: "Please enter a valid email address" 
-        });
-      }
+      const { data, error } = await supabase
+        .from('email_subscriptions')
+        .upsert({ email, is_active: true })
+        .select()
+        .single();
 
-      const validatedData = insertEmailSubscriptionSchema.parse({ email });
-      
-      try {
-        const subscription = await storage.createEmailSubscription(validatedData);
-        res.status(201).json({ 
-          success: true, 
-          message: "Successfully subscribed to our daily AI business tips!",
-          subscription
-        });
-      } catch (error: any) {
-        // Handle duplicate email
-        if (error.code === '23505') {
-          res.status(409).json({ 
-            success: false, 
-            message: "This email is already subscribed to our newsletter." 
-          });
-        } else {
-          throw error;
-        }
-      }
+      if (error) throw error;
+
+      res.json({ success: true, subscription: data });
     } catch (error) {
-      console.error('Email subscription error:', error);
+      console.error("Newsletter subscription error:", error);
       res.status(500).json({ 
         success: false, 
-        message: "Failed to subscribe to newsletter" 
+        error: error instanceof Error ? error.message : "Failed to subscribe to newsletter" 
       });
     }
   });
 
-  // Unsubscribe endpoint
-  app.get("/api/unsubscribe", async (req, res) => {
-    try {
-      const { email } = req.query;
-      
-      if (!email || typeof email !== 'string') {
-        return res.status(400).json({ 
-          success: false, 
-          message: "Email is required" 
-        });
-      }
-
-      await storage.unsubscribeEmail(email);
-      res.json({ 
-        success: true, 
-        message: "Successfully unsubscribed from our newsletter." 
-      });
-    } catch (error) {
-      console.error('Unsubscribe error:', error);
-      res.status(500).json({ 
-        success: false, 
-        message: "Failed to unsubscribe" 
-      });
-    }
-  });
-
-  // Manual newsletter send endpoint (for testing)
-  app.post("/api/admin/send-newsletter", async (req, res) => {
-    try {
-      const results = await newsletterService.sendDailyNewsletter();
-      res.json({ 
-        success: true, 
-        message: "Newsletter sent successfully",
-        results
-      });
-    } catch (error) {
-      console.error('Newsletter send error:', error);
-      res.status(500).json({ 
-        success: false, 
-        message: "Failed to send newsletter" 
-      });
-    }
-  });
-
-  // Get subscription stats
-  app.get("/api/admin/newsletter-stats", async (req, res) => {
-    try {
-      const activeSubscriptions = await storage.getEmailSubscriptions(true);
-      const totalSubscriptions = await storage.getEmailSubscriptions(false);
-      
-      res.json({ 
-        success: true, 
-        stats: {
-          activeSubscribers: activeSubscriptions.length,
-          totalSubscribers: totalSubscriptions.length,
-          recentSubscribers: totalSubscriptions.slice(0, 5)
-        }
-      });
-    } catch (error) {
-      console.error('Newsletter stats error:', error);
-      res.status(500).json({ 
-        success: false, 
-        message: "Failed to get newsletter stats" 
-      });
-    }
-  });
-
-  // Analytics tracking endpoints
+  // Analytics - Page View
   app.post("/api/analytics/page-view", async (req, res) => {
     try {
       const { page, userAgent, sessionId } = req.body;
-      
-      if (!page) {
-        return res.status(400).json({ 
-          success: false, 
-          message: "Page is required" 
-        });
-      }
+      const ipAddress = req.ip;
 
-      const pageView = await storage.trackPageView({
-        page,
-        userAgent,
-        ipAddress: req.ip,
-        sessionId
-      });
+      const { data, error } = await supabase
+        .from('page_views')
+        .insert({
+          page,
+          user_agent: userAgent,
+          ip_address: ipAddress,
+          session_id: sessionId
+        })
+        .select()
+        .single();
 
-      res.json({ success: true, pageView });
+      if (error) throw error;
+
+      res.json({ success: true, pageView: data });
     } catch (error) {
-      console.error('Page view tracking error:', error);
+      console.error("Page view tracking error:", error);
       res.status(500).json({ 
         success: false, 
-        message: "Failed to track page view" 
+        error: "Failed to track page view" 
       });
     }
   });
 
+  // Analytics - User Interaction
   app.post("/api/analytics/interaction", async (req, res) => {
     try {
       const { type, element, page, data, sessionId } = req.body;
-      
-      if (!type || !page) {
-        return res.status(400).json({ 
-          success: false, 
-          message: "Type and page are required" 
-        });
-      }
 
-      const interaction = await storage.trackUserInteraction({
-        type,
-        element,
-        page,
-        data: data ? JSON.stringify(data) : null,
-        sessionId
-      });
+      const { data: interaction, error } = await supabase
+        .from('user_interactions')
+        .insert({
+          type,
+          element,
+          page,
+          data: data ? JSON.stringify(data) : null,
+          session_id: sessionId
+        })
+        .select()
+        .single();
+
+      if (error) throw error;
 
       res.json({ success: true, interaction });
     } catch (error) {
-      console.error('User interaction tracking error:', error);
+      console.error("Interaction tracking error:", error);
       res.status(500).json({ 
         success: false, 
-        message: "Failed to track interaction" 
+        error: "Failed to track interaction" 
       });
     }
   });
 
-  // Analytics dashboard endpoint
+  // Admin Analytics Dashboard
   app.get("/api/admin/analytics", async (req, res) => {
     try {
       const days = parseInt(req.query.days as string) || 30;
-      const dashboard = await storage.getAnalyticsDashboard(days);
-      const recentActivity = await storage.getRecentActivity();
-      
-      res.json({ 
-        success: true, 
-        dashboard,
-        recentActivity
+      const startDate = new Date();
+      startDate.setDate(startDate.getDate() - days);
+
+      // Page views
+      const { data: pageViews, error: pageViewsError } = await supabase
+        .from('page_views')
+        .select('page')
+        .gte('timestamp', startDate.toISOString());
+
+      if (pageViewsError) throw pageViewsError;
+
+      // User interactions
+      const { data: interactions, error: interactionsError } = await supabase
+        .from('user_interactions')
+        .select('type')
+        .gte('timestamp', startDate.toISOString());
+
+      if (interactionsError) throw interactionsError;
+
+      // Contacts count
+      const { count: contactsCount, error: contactsError } = await supabase
+        .from('contacts')
+        .select('*', { count: 'exact', head: true })
+        .gte('created_at', startDate.toISOString());
+
+      if (contactsError) throw contactsError;
+
+      // Email subscriptions count
+      const { count: subscriptionsCount, error: subscriptionsError } = await supabase
+        .from('email_subscriptions')
+        .select('*', { count: 'exact', head: true })
+        .eq('is_active', true)
+        .gte('created_at', startDate.toISOString());
+
+      if (subscriptionsError) throw subscriptionsError;
+
+      // Chatbot sessions
+      const { data: chatbotData, error: chatbotError } = await supabase
+        .from('chatbot_sessions')
+        .select('messages')
+        .gte('start_time', startDate.toISOString());
+
+      if (chatbotError) throw chatbotError;
+
+      // Recent activity
+      const { data: recentPageViews, error: recentPageViewsError } = await supabase
+        .from('page_views')
+        .select('*')
+        .order('timestamp', { ascending: false })
+        .limit(50);
+
+      if (recentPageViewsError) throw recentPageViewsError;
+
+      const { data: recentInteractions, error: recentInteractionsError } = await supabase
+        .from('user_interactions')
+        .select('*')
+        .order('timestamp', { ascending: false })
+        .limit(50);
+
+      if (recentInteractionsError) throw recentInteractionsError;
+
+      // Process data
+      const pageViewCounts = pageViews?.reduce((acc: any, pv) => {
+        acc[pv.page] = (acc[pv.page] || 0) + 1;
+        return acc;
+      }, {});
+
+      const interactionCounts = interactions?.reduce((acc: any, int) => {
+        acc[int.type] = (acc[int.type] || 0) + 1;
+        return acc;
+      }, {});
+
+      const avgMessages = chatbotData?.length > 0 
+        ? chatbotData.reduce((sum, session) => sum + (session.messages || 0), 0) / chatbotData.length
+        : 0;
+
+      res.json({
+        dashboard: {
+          pageViews: Object.entries(pageViewCounts || {}).map(([page, count]) => ({ page, count })),
+          interactions: Object.entries(interactionCounts || {}).map(([type, count]) => ({ type, count })),
+          contacts: contactsCount || 0,
+          subscriptions: subscriptionsCount || 0,
+          chatbot: {
+            sessions: chatbotData?.length || 0,
+            avgMessages: Math.round(avgMessages * 100) / 100
+          }
+        },
+        recentActivity: {
+          pageViews: recentPageViews || [],
+          interactions: recentInteractions || []
+        }
       });
     } catch (error) {
-      console.error('Analytics dashboard error:', error);
+      console.error("Analytics fetch error:", error);
       res.status(500).json({ 
         success: false, 
-        message: "Failed to get analytics data" 
+        error: "Failed to fetch analytics data" 
       });
     }
   });
 
-  // Chatbot AI query endpoint
-  app.post("/api/chatbot", async (req, res) => {
+  // Chatbot session tracking
+  app.post("/api/chatbot/session", async (req, res) => {
     try {
-      const { question, context } = req.body;
-      
-      if (!question || typeof question !== 'string') {
-        return res.status(400).json({ 
-          success: false, 
-          message: "Question is required" 
-        });
-      }
+      const { sessionId, messages, satisfaction } = req.body;
 
-      // Try to get AI response from DeepSeek
-      try {
-        const aiResponse = await queryDeepSeek(question, context || "homepage");
-        res.json({ 
-          success: true, 
-          response: aiResponse,
-          source: "ai"
-        });
-      } catch (error) {
-        console.error('DeepSeek error:', error);
-        // Fallback to a helpful message if DeepSeek fails
-        res.json({ 
-          success: true, 
-          response: "I'm having trouble accessing my advanced AI capabilities right now. For complex questions, please contact our team directly at +263 78 549 4594 or ngonidzashezimbwa95@gmail.com. I'd be happy to help with basic questions about our services, pricing, or how to get started with AI consulting!",
-          source: "fallback"
-        });
-      }
+      const { data, error } = await supabase
+        .from('chatbot_sessions')
+        .upsert({
+          session_id: sessionId,
+          messages,
+          satisfaction,
+          end_time: new Date().toISOString()
+        })
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      res.json({ success: true, session: data });
     } catch (error) {
-      console.error('Chatbot endpoint error:', error);
+      console.error("Chatbot session tracking error:", error);
       res.status(500).json({ 
         success: false, 
-        message: "Failed to process chatbot request" 
+        error: "Failed to track chatbot session" 
       });
     }
   });
-
-  const httpServer = createServer(app);
-
-  return httpServer;
 }
